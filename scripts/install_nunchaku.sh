@@ -27,11 +27,12 @@ if ! python -c "import nunchaku" 2>/dev/null; then
 
     TORCH_VER=$(python -c "import torch; v=torch.__version__.split('+')[0].split('.')[:2]; print('.'.join(v))" 2>/dev/null || echo "")
     PY_VER=$(python -c "import sys; print(f'cp{sys.version_info.major}{sys.version_info.minor}')" 2>/dev/null || echo "cp312")
+    CUDA_VER=$(python -c "import torch; print(torch.version.cuda)" 2>/dev/null || echo "")
 
     if [[ -n "$TORCH_VER" ]]; then
         # Try latest stable release wheel from GitHub
         NUNCHAKU_VERSION="${NUNCHAKU_VERSION:-1.2.1}"
-        WHEEL_URL="https://github.com/nunchaku-ai/nunchaku/releases/download/v${NUNCHAKU_VERSION}/nunchaku-${NUNCHAKU_VERSION}+torch${TORCH_VER}-${PY_VER}-${PY_VER}-linux_x86_64.whl"
+        WHEEL_URL="https://github.com/nunchaku-ai/nunchaku/releases/download/v${NUNCHAKU_VERSION}/nunchaku-${NUNCHAKU_VERSION}+cu${CUDA_VER}torch${TORCH_VER}-${PY_VER}-${PY_VER}-linux_x86_64.whl"
 
         echo "Attempting: pip install $WHEEL_URL"
         if pip install "$WHEEL_URL"; then
